@@ -55,13 +55,15 @@ class VideoPullGenerator:
 async def run(
         video_task_id: str,
         reporter: VerbCallbacks,
+        strategy_config: dict[str, Any],
 ) -> VideoResult | None:
-    return await _run_extractor(video_task_id, reporter)
+    return await _run_extractor(video_task_id, reporter, strategy_config)
 
 
 async def _run_extractor(
         video_task_id: str,
         reporter: VerbCallbacks,
+        strategy_config: dict[str, Any],
 ) -> VideoResult | None:
     # RateLimiter
     rate_limiter = RateLimiter(rate=1, per=60)
@@ -80,7 +82,7 @@ async def _run_extractor(
 
         if cached_result:
             return cached_result
-
+        reporter.log(f"VideoPullGenerator:{cache_key}", {"video_task_id": video_task_id})
         generator_output = await generator({"video_task_id": video_task_id})
         if generator_output:
             await _cache.set(
