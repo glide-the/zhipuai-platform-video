@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+import argparse
+import asyncio
+from task import convert_image_to_video, convert_text_generator
+import pandas as pd
+import os
+import sys
+import logging
+import logging.config
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[logging.StreamHandler(sys.stdout)])
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description='Convert the image to video')
+    parser.add_argument('--input_excel', type=str, help='The input excel file')
+    parser.add_argument('--output_path', type=str, help='The output path')
+    parser.add_argument('--prompt_num_threads', type=int, default=2, help='The number of threads for prompt')
+    parser.add_argument('--video_num_threads', type=int, default=1, help='The number of threads for video')
+
+    args = parser.parse_args()
+    # Load the data
+    level_contexts = pd.read_excel(args.input_excel)
+
+    text_generator_strategy = {
+        "input_text_key": "input_text",
+        "num_threads": args.prompt_num_threads
+    }
+    # Convert the image to video
+    prompt_report: pd.DataFrame = asyncio.run(convert_text_generator(level_contexts, text_generator_strategy))
+    # 拼接prompt_report和level_contexts
+    prompt_report = pd.concat([level_contexts, prompt_report], axis=1)
+    # Save the video report
+    prompt_report_path = os.path.join(args.output_path, "prompt_report.csv")
+    prompt_report.to_csv(prompt_report_path, index=False)
+    image_to_video_strategy = {
+        "image_path_key": "image_path",
+        "video_prompt_key": "video_prompt",
+        "num_threads": args.video_num_threads
+    }
+    # Convert the image to video
+    video_report: pd.DataFrame = asyncio.run(convert_image_to_video(prompt_report, image_to_video_strategy))
+    # Save the video report
+    video_report_path = os.path.join(args.output_path, "video_report.csv")
+    video_report.to_csv(video_report_path, index=False)
