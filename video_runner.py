@@ -35,14 +35,19 @@ class VideoStrategyGenerator:
         output = None
         try:
             client = ZhipuAI()  # 填写您自己的APIKey
+            if inputs.get("request_img", True):
 
-            base64_image = encode_image(inputs["image_path"])
-            output = client.videos.generations(
-                model="cogvideo",
-                image_url=base64_image,
-                prompt=inputs["video_prompt"]
-            )
-
+                base64_image = encode_image(inputs["image_path"])
+                output = client.videos.generations(
+                    model="cogvideo",
+                    image_url=base64_image,
+                    prompt=inputs["video_prompt"]
+                )
+            else:
+                output = client.videos.generations(
+                    model="cogvideo",
+                    prompt=inputs["video_prompt"]
+                )
         except Exception as e:
             log.exception("error VideoStrategyGenerator")
             output = {}
@@ -54,14 +59,16 @@ async def run(
         video_prompt: str,
         image_path: str,
         reporter: VerbCallbacks,
+        strategy_config: dict[str, Any],
 ) -> VideoReport | None:
-    return await _run_extractor(video_prompt, image_path, reporter)
+    return await _run_extractor(video_prompt, image_path, reporter, strategy_config)
 
 
 async def _run_extractor(
         video_prompt: str,
         image_path: str,
         reporter: VerbCallbacks,
+        strategy_config: dict[str, Any],
 ) -> VideoReport | None:
     # RateLimiter
     rate_limiter = RateLimiter(rate=1, per=60)
@@ -85,7 +92,11 @@ async def _run_extractor(
                                video_task_id=cached_result
                                )
 
-        generator_output = await generator({"image_path": image_path, "video_prompt": video_prompt})
+        reporter.log(f"Running VideoStrategyGenerator:{cache_key}")
+        generator_output = await generator({"image_path": image_path,
+                                            "video_prompt": video_prompt,
+                                            "request_img": strategy_config.get("request_img", True)
+        })
         if generator_output:
             await _cache.set(
                 cache_key,

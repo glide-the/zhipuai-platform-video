@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import argparse
 import asyncio
+
+from reporting.console_workflow_callbacks import ConsoleWorkflowCallbacks
+from reporting.runner_callbacks import RunnerCallbacks
 from task import convert_image_to_video, convert_text_generator
 import pandas as pd
 import os
@@ -22,6 +25,7 @@ if __name__ == "__main__":
     parser.add_argument('--output_path', type=str, help='The output path')
     parser.add_argument('--prompt_num_threads', type=int, default=2, help='The number of threads for prompt')
     parser.add_argument('--video_num_threads', type=int, default=1, help='The number of threads for video')
+    parser.add_argument('--request_img', type=str, default="true", help='Whether to request the image')
 
     args = parser.parse_args()
     # Load the data
@@ -31,20 +35,26 @@ if __name__ == "__main__":
         "input_text_key": "input_text",
         "num_threads": args.prompt_num_threads
     }
+    callbacks = RunnerCallbacks(ConsoleWorkflowCallbacks())
+
     # Convert the image to video
-    prompt_report: pd.DataFrame = asyncio.run(convert_text_generator(level_contexts, text_generator_strategy))
-    # 拼接prompt_report和level_contexts
-    prompt_report = pd.concat([level_contexts, prompt_report], axis=1)
+    prompt_report: pd.DataFrame = asyncio.run(convert_text_generator(level_contexts=level_contexts,
+                                                                     callbacks=callbacks,
+                                                                     strategy=text_generator_strategy))
+
     # Save the video report
     prompt_report_path = os.path.join(args.output_path, "prompt_report.csv")
     prompt_report.to_csv(prompt_report_path, index=False)
     image_to_video_strategy = {
         "image_path_key": "image_path",
         "video_prompt_key": "video_prompt",
-        "num_threads": args.video_num_threads
+        "num_threads": args.video_num_threads,
+        "request_img": args.request_img == "true",
     }
     # Convert the image to video
-    video_report: pd.DataFrame = asyncio.run(convert_image_to_video(prompt_report, image_to_video_strategy))
+    video_report: pd.DataFrame = asyncio.run(convert_image_to_video(level_contexts=prompt_report,
+                                                                    callbacks=callbacks,
+                                                                    strategy=image_to_video_strategy))
     # Save the video report
     video_report_path = os.path.join(args.output_path, "video_report.csv")
     video_report.to_csv(video_report_path, index=False)

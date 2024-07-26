@@ -50,13 +50,15 @@ class VideoStrategyPrompt:
 async def run(
         input_text: str,
         reporter: VerbCallbacks,
+        strategy_config: dict[str, Any],
 ) -> PromptReport | None:
-    return await _run_extractor(input_text, reporter)
+    return await _run_extractor(input_text, reporter, strategy_config)
 
 
 async def _run_extractor(
         input_text: str,
         reporter: VerbCallbacks,
+        strategy_config: dict[str, Any],
 ) -> PromptReport | None:
     # RateLimiter
     rate_limiter = RateLimiter(rate=1, per=60)
@@ -73,6 +75,7 @@ async def _run_extractor(
             return PromptReport(input_text=input_text,
                                 video_prompt=cached_result,
                                 )
+        reporter.log(f"Running VideoStrategyPrompt:{cache_key}")
         video_prompt = await generator({"input_text": input_text})
         if video_prompt:
             await _cache.set(
