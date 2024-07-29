@@ -4,14 +4,14 @@ import pandas as pd
 
 from datashaper import NoopVerbCallbacks, derive_from_rows, AsyncType, VerbCallbacks
 
-from video_pull_runner import VideoResult
+from zhipuai_platform_video.video_pull_runner import VideoResult
 
 
 async def video_pull_task(
         level_contexts: pd.DataFrame,
         callbacks: VerbCallbacks,
         strategy: dict) -> pd.DataFrame:
-    from video_pull_runner import run as runner
+    from zhipuai_platform_video.video_pull_runner import run as runner
     reports: list[VideoResult | None] = []
 
     async def run_generate(record):

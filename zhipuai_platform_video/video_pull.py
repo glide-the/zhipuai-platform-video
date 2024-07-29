@@ -1,16 +1,15 @@
 import argparse
 import asyncio
-from reporting.console_workflow_callbacks import ConsoleWorkflowCallbacks
-from reporting.runner_callbacks import RunnerCallbacks
+from zhipuai_platform_video.reporting.console_workflow_callbacks import ConsoleWorkflowCallbacks
+from zhipuai_platform_video.reporting.runner_callbacks import RunnerCallbacks
 
 import pandas as pd
 
 import os
 import sys
-import logging
 import logging.config
 
-from result_task import video_pull_task
+from zhipuai_platform_video.result_task import video_pull_task
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO,

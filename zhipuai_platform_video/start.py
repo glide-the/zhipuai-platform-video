@@ -2,13 +2,12 @@
 import argparse
 import asyncio
 
-from reporting.console_workflow_callbacks import ConsoleWorkflowCallbacks
-from reporting.runner_callbacks import RunnerCallbacks
-from task import convert_image_to_video, convert_text_generator
+from zhipuai_platform_video.reporting.console_workflow_callbacks import ConsoleWorkflowCallbacks
+from zhipuai_platform_video.reporting.runner_callbacks import RunnerCallbacks
+from zhipuai_platform_video.task import convert_image_to_video, convert_text_generator
 import pandas as pd
 import os
 import sys
-import logging
 import logging.config
 
 
@@ -41,10 +40,11 @@ if __name__ == "__main__":
     prompt_report: pd.DataFrame = asyncio.run(convert_text_generator(level_contexts=level_contexts,
                                                                      callbacks=callbacks,
                                                                      strategy=text_generator_strategy))
-
+    # 合并level_contexts、prompt_report两个表格，重复字段会自动去重
+    merged_report = pd.merge(level_contexts, prompt_report, on="input_text", how="left")
     # Save the video report
     prompt_report_path = os.path.join(args.output_path, "prompt_report.csv")
-    prompt_report.to_csv(prompt_report_path, index=False)
+    merged_report.to_csv(prompt_report_path, index=False)
     image_to_video_strategy = {
         "image_path_key": "image_path",
         "video_prompt_key": "video_prompt",
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         "request_img": args.request_img == "true",
     }
     # Convert the image to video
-    video_report: pd.DataFrame = asyncio.run(convert_image_to_video(level_contexts=prompt_report,
+    video_report: pd.DataFrame = asyncio.run(convert_image_to_video(level_contexts=merged_report,
                                                                     callbacks=callbacks,
                                                                     strategy=image_to_video_strategy))
     # Save the video report

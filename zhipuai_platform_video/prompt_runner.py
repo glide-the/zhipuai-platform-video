@@ -7,9 +7,9 @@ from langchain_glm import ChatZhipuAI
 
 from datashaper import VerbCallbacks
 
-from cache import load_cache
-from rate_limiter import RateLimiter
-from utils import create_hash_key
+from zhipuai_platform_video.cache import load_cache
+from zhipuai_platform_video.rate_limiter import RateLimiter
+from zhipuai_platform_video.utils import create_hash_key
 
 log = logging.getLogger(__name__)
 

@@ -16,7 +16,7 @@ from aiofiles.os import remove
 from aiofiles.ospath import exists
 from datashaper import Progress
 
-from storage._typing import PipelineStorage
+from zhipuai_platform_video.storage._typing import PipelineStorage
 
 log = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 import os
 
-from prompt_runner import PromptReport
-from video_runner import VideoReport
+from zhipuai_platform_video.prompt_runner import PromptReport
+from zhipuai_platform_video.video_runner import VideoReport
 from zhipuai import ZhipuAI
 from datashaper import (
     AsyncType,
@@ -20,7 +20,7 @@ import pandas as pd
 async def convert_image_to_video(level_contexts: pd.DataFrame,
                                  callbacks: VerbCallbacks,
                                  strategy: dict) -> pd.DataFrame:
-    from video_runner import run as runner
+    from zhipuai_platform_video.video_runner import run as runner
     reports: list[VideoReport | None] = []
 
     async def run_generate(record):
@@ -49,7 +49,7 @@ async def convert_text_generator(
         level_contexts: pd.DataFrame,
         callbacks: VerbCallbacks,
         strategy: dict) -> pd.DataFrame:
-    from prompt_runner import run as runner
+    from zhipuai_platform_video.prompt_runner import run as runner
     reports: list[PromptReport | None] = []
 
     async def run_generate(record):

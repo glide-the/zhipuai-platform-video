@@ -6,8 +6,8 @@
 import json
 from typing import Any
 
-from storage._typing import PipelineStorage
-from cache.pipeline_cache import PipelineCache
+from zhipuai_platform_video.storage._typing import PipelineStorage
+from zhipuai_platform_video.cache.pipeline_cache import PipelineCache
 
 
 class JsonPipelineCache(PipelineCache):
