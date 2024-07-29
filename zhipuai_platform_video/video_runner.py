@@ -45,7 +45,7 @@ class VideoStrategyGenerator:
                 )
             else:
                 output = client.videos.generations(
-                    model="cogvideo",
+                    model="cogvideox",
                     prompt=inputs["video_prompt"]
                 )
         except Exception as e:
