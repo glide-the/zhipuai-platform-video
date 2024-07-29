@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "zhipuai-platform-video"
-version = "0.0.1"
+version = "0.0.2"
 description = "ZhipuAI 开放平台视频生成插件"
 authors = ["Zhipu AI"]
 readme = "README.md"

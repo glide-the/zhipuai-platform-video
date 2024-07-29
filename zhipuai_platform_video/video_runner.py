@@ -39,7 +39,7 @@ class VideoStrategyGenerator:
 
                 base64_image = encode_image(inputs["image_path"])
                 output = client.videos.generations(
-                    model="cogvideo",
+                    model="cogvideox",
                     image_url=base64_image,
                     prompt=inputs["video_prompt"]
                 )
