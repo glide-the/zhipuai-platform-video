@@ -28,7 +28,7 @@ export ZHIPUAI_API_KEY="开放平台key"
 > 启动目录为项目根目录
 
 ```shell
-python start.py --input_excel C:\\Users\\renrui\\Desktop\\data\\level_contexts.xlsx --output_path C:\\Users\\renrui\\Desktop\\data\\
+python -m zhipuai_platform_video.start --input_excel C:\\Users\\renrui\\Desktop\\data\\level_contexts.xlsx --output_path C:\\Users\\renrui\\Desktop\\data\\
 ```
 
 > 参数说明
@@ -50,7 +50,7 @@ python start.py --input_excel C:\\Users\\renrui\\Desktop\\data\\level_contexts.x
 
 > 启动目录为项目根目录
 ```shell
-python video_pull.py --task_video_csv C:\\Users\\renrui\\Desktop\\data\\video_report.csv --output_path C:\\Users\\renrui\\Desktop\\data\\
+python -m zhipuai_platform_video.video_pull --task_video_csv C:\\Users\\renrui\\Desktop\\data\\video_report.csv --output_path C:\\Users\\renrui\\Desktop\\data\\
 ```
 > 参数说明
 > 
@@ -63,4 +63,20 @@ python video_pull.py --task_video_csv C:\\Users\\renrui\\Desktop\\data\\video_re
 > 根据需要配置线程
 > 
 > num_threads: 线程数,默认2
+> 
+
+
+- 下载视频 
+
+> 启动目录为项目根目录
+```shell
+python -m zhipuai_platform_video.download_video  --csv_file_path  C:\\Users\\renrui\\Desktop\\data\\video_pull_report.csv --output_path C:\\Users\\renrui\\Desktop\\data\\
+
+```
+> 参数说明
+> 
+> csv_file_path： video_pull_report.csv文件
+> 
+> output_path：为输出文件路径 视频下载目录
+>   
 > 
