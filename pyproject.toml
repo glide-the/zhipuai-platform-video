@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "zhipuai-platform-video"
-version = "0.0.3"
+version = "0.0.4"
 description = "ZhipuAI 开放平台视频生成插件"
 authors = ["Zhipu AI"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12,!=3.9.7 "
+python = ">=3.10,<3.12"
 aiofiles = ">=24.1.0"
 langchain-glm = ">=0.0.1"
 zhipuai = ">=2.1.4"
