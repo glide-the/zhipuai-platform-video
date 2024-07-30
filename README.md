@@ -32,10 +32,13 @@ export ZHIPUAI_API_KEY="开放平台key"
 ```
 
 - 3、准备数据
-基础表格里需要准备的数据包含了 input_text, image_path 字段
 
-input_text 为生成提示词，用于控制镜头
-image_path 为起始帧的图片，这个图片可以不存在，使用 request_img 命令参数控制是否必须采用起始帧，默认必须存在
+基础表格里需要准备的数据包含了 **input_text**, **image_path** 字段
+
+**input_text** 为生成提示词，用于控制镜头
+
+**image_path** 为起始帧的图片，这个图片可以不存在，使用 request_img 命令参数控制是否必须采用起始帧，默认必须存在
+
 
 - 4、运行
 
